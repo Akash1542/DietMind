@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "dist")));
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -205,6 +206,10 @@ You are a nutrition expert. Based on the following parameters, generate a person
     console.error("Error generating meal plan:", error);
     res.status(500).json({ error: "Failed to generate meal plan" });
   }
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
